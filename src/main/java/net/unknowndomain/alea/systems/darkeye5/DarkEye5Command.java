@@ -18,7 +18,6 @@ package net.unknowndomain.alea.systems.darkeye5;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
-import net.unknowndomain.alea.AleaListener;
 import net.unknowndomain.alea.command.HelpWrapper;
 import net.unknowndomain.alea.systems.RpgSystemCommand;
 import net.unknowndomain.alea.systems.RpgSystemDescriptor;
@@ -127,7 +126,7 @@ public class DarkEye5Command extends RpgSystemCommand
             String params = prefixMatcher.group(CMD_PARAMS);
             if (params == null || params.isEmpty())
             {
-                return HelpWrapper.printHelp(AleaListener.PREFIX + " " + prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
+                return HelpWrapper.printHelp(prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
             }
             try
             {
@@ -141,7 +140,7 @@ public class DarkEye5Command extends RpgSystemCommand
                         (cmd.hasOption(SKILL_PARAM) ^ cmd.hasOption(SKILL_ATTR3_PARAM))
                         )
                 {
-                    return HelpWrapper.printHelp(AleaListener.PREFIX + " " + prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
+                    return HelpWrapper.printHelp(prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
                 }
                 
                 
@@ -171,7 +170,7 @@ public class DarkEye5Command extends RpgSystemCommand
             } 
             catch (ParseException | NumberFormatException ex)
             {
-                retVal = HelpWrapper.printHelp(AleaListener.PREFIX + " " + prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
+                retVal = HelpWrapper.printHelp(prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
             }
         }
         return retVal;
