@@ -30,6 +30,8 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,6 +39,7 @@ import org.javacord.api.entity.message.MessageBuilder;
  */
 public class DarkEye5Command extends RpgSystemCommand
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DarkEye5Command.class);
     private static final RpgSystemDescriptor DESC = new RpgSystemDescriptor("The Dark Eye 5th Edition", "da5", "the-dark-eye-5th");
     
     private static final String ATTR_PARAM = "attribute";
@@ -128,6 +131,7 @@ public class DarkEye5Command extends RpgSystemCommand
             {
                 return HelpWrapper.printHelp(prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
             }
+            LOGGER.debug(cmdLine);
             try
             {
                 CommandLineParser parser = new DefaultParser();
