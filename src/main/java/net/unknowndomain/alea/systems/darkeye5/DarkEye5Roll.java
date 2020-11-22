@@ -19,8 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import net.unknowndomain.alea.messages.MsgBuilder;
-import net.unknowndomain.alea.messages.ReturnMsg;
 import net.unknowndomain.alea.roll.GenericRoll;
 
 /**
@@ -35,7 +33,7 @@ public abstract class DarkEye5Roll implements GenericRoll
         VERBOSE
     }
     
-    private final Set<Modifiers> mods;
+    protected final Set<Modifiers> mods;
     
     public DarkEye5Roll(Modifiers ... mod)
     {
@@ -49,42 +47,5 @@ public abstract class DarkEye5Roll implements GenericRoll
         {
             this.mods.addAll(mod);
         }
-    }
-    
-    protected ReturnMsg formatResults(DarkEye5Results results)
-    {
-        MsgBuilder mb = new MsgBuilder();
-        mb.append("Outcome: ");
-        if (results.isSpectacular())
-        {
-            mb.append("Spectacular ");
-        }
-        else if (results.isCritical())
-        {
-            mb.append("Critical ");
-        }
-        if (results.isSuccess())
-        {
-            mb.append("Success");
-        }
-        else
-        {
-            mb.append("Failure");
-        }
-        if (results.getQualityLevel() != null)
-        {
-            mb.append(" [ QL : ").append(results.getQualityLevel()).append(" ]");
-        }
-        mb.appendNewLine();
-        if (mods.contains(Modifiers.VERBOSE))
-        {
-            mb.append("Results: ").append(" [ ");
-            for (Integer t : results.getResults())
-            {
-                mb.append(t).append(" ");
-            }
-            mb.append("]").appendNewLine();
-        }
-        return mb.build();
     }
 }

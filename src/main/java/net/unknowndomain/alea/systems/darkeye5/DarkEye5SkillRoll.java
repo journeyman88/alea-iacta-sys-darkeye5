@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import net.unknowndomain.alea.dice.D20;
-import net.unknowndomain.alea.messages.ReturnMsg;
+import net.unknowndomain.alea.dice.standard.D20;
+import net.unknowndomain.alea.roll.GenericResult;
 
 /**
  *
@@ -50,10 +50,11 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     }
     
     @Override
-    public ReturnMsg getResult()
+    public GenericResult getResult()
     {
         DarkEye5Results results = buildResults(D20.INSTANCE.roll(), D20.INSTANCE.roll(), D20.INSTANCE.roll());
-        return formatResults(results);
+        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        return results;
     }
     
     private DarkEye5Results buildResults(Integer ... res)

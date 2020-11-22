@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.roll.GenericResult;
 
 /**
  *
  * @author journeyman
  */
-public class DarkEye5Results
+public class DarkEye5Results extends GenericResult
 {
     private final List<Integer> results;
     private boolean success;
@@ -87,5 +89,41 @@ public class DarkEye5Results
     public void setQualityLevel(Integer qualityLevel)
     {
         this.qualityLevel = qualityLevel;
+    }
+
+    @Override
+    protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
+    {
+        messageBuilder.append("Outcome: ");
+        if (isSpectacular())
+        {
+            messageBuilder.append("Spectacular ");
+        }
+        else if (isCritical())
+        {
+            messageBuilder.append("Critical ");
+        }
+        if (isSuccess())
+        {
+            messageBuilder.append("Success");
+        }
+        else
+        {
+            messageBuilder.append("Failure");
+        }
+        if (getQualityLevel() != null)
+        {
+            messageBuilder.append(" [ QL : ").append(getQualityLevel()).append(" ]");
+        }
+        messageBuilder.appendNewLine();
+        if (verbose)
+        {
+            messageBuilder.append("Results: ").append(" [ ");
+            for (Integer t : getResults())
+            {
+                messageBuilder.append(t).append(" ");
+            }
+            messageBuilder.append("]").appendNewLine();
+        }
     }
 }

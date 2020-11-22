@@ -16,6 +16,7 @@
 package net.unknowndomain.alea.systems.darkeye5;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import net.unknowndomain.alea.command.HelpWrapper;
 import net.unknowndomain.alea.messages.ReturnMsg;
@@ -125,13 +126,9 @@ public class DarkEye5Command extends RpgSystemCommand
     }
     
     @Override
-    protected ReturnMsg safeCommand(String cmdName, String cmdParams)
+    protected Optional<GenericRoll> safeCommand(String cmdParams)
     {
-        ReturnMsg retVal;
-        if (cmdParams == null || cmdParams.isEmpty())
-        {
-            return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
-        }
+        Optional<GenericRoll> retVal;
         try
         {
             CommandLineParser parser = new DefaultParser();
@@ -144,7 +141,7 @@ public class DarkEye5Command extends RpgSystemCommand
                     (cmd.hasOption(SKILL_PARAM) ^ cmd.hasOption(SKILL_ATTR3_PARAM))
                     )
             {
-                return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
+                return Optional.empty();
             }
 
 
@@ -170,13 +167,19 @@ public class DarkEye5Command extends RpgSystemCommand
                 String s3 = cmd.getOptionValue(SKILL_ATTR3_PARAM);
                 roll = new DarkEye5SkillRoll(Integer.parseInt(sL), Integer.parseInt(s1), Integer.parseInt(s2), Integer.parseInt(s3), mods);
             }
-            retVal = roll.getResult();
+            retVal = Optional.of(roll);
         } 
         catch (ParseException | NumberFormatException ex)
         {
-            retVal = HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
+            retVal = Optional.empty();
         }
         return retVal;
+    }
+    
+    @Override
+    public ReturnMsg getHelpMessage(String cmdName)
+    {
+        return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
     }
     
 }
