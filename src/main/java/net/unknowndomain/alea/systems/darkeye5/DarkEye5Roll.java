@@ -19,9 +19,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import net.unknowndomain.alea.dice.D20;
+import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.messages.ReturnMsg;
 import net.unknowndomain.alea.roll.GenericRoll;
-import org.javacord.api.entity.message.MessageBuilder;
 
 /**
  *
@@ -51,9 +51,9 @@ public abstract class DarkEye5Roll implements GenericRoll
         }
     }
     
-    protected MessageBuilder formatResults(DarkEye5Results results)
+    protected ReturnMsg formatResults(DarkEye5Results results)
     {
-        MessageBuilder mb = new MessageBuilder();
+        MsgBuilder mb = new MsgBuilder();
         mb.append("Outcome: ");
         if (results.isSpectacular())
         {
@@ -85,6 +85,6 @@ public abstract class DarkEye5Roll implements GenericRoll
             }
             mb.append("]").appendNewLine();
         }
-        return mb;
+        return mb.build();
     }
 }

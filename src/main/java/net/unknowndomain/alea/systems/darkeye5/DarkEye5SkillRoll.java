@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import net.unknowndomain.alea.dice.D20;
-import org.javacord.api.entity.message.MessageBuilder;
+import net.unknowndomain.alea.messages.ReturnMsg;
 
 /**
  *
@@ -50,7 +50,7 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     }
     
     @Override
-    public MessageBuilder getResult()
+    public ReturnMsg getResult()
     {
         DarkEye5Results results = buildResults(D20.INSTANCE.roll(), D20.INSTANCE.roll(), D20.INSTANCE.roll());
         return formatResults(results);
