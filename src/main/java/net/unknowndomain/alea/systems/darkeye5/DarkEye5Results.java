@@ -118,6 +118,7 @@ public class DarkEye5Results extends GenericResult
         messageBuilder.appendNewLine();
         if (verbose)
         {
+            messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
             messageBuilder.append("Results: ").append(" [ ");
             for (Integer t : getResults())
             {
