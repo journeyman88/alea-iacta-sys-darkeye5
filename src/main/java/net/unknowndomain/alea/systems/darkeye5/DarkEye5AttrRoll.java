@@ -29,12 +29,12 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
     
     private final Integer attribute;
     
-    public DarkEye5AttrRoll(Integer attribute, Modifiers ... mod)
+    public DarkEye5AttrRoll(Integer attribute, DarkEye5Modifiers ... mod)
     {
         this(attribute, Arrays.asList(mod));
     }
     
-    public DarkEye5AttrRoll(Integer attribute, Collection<Modifiers> mod)
+    public DarkEye5AttrRoll(Integer attribute, Collection<DarkEye5Modifiers> mod)
     {
         super(mod);
         this.attribute = attribute;
@@ -44,7 +44,7 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
     public GenericResult getResult()
     {
         DarkEye5Results results = buildResults(D20.INSTANCE.roll());
-        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
         return results;
     }
     

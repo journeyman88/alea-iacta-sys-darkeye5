@@ -34,12 +34,12 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     private final Integer skillLevel;
     private final List<Integer> skillAttributes;
     
-    public DarkEye5SkillRoll(Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, Modifiers ... mod)
+    public DarkEye5SkillRoll(Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, DarkEye5Modifiers ... mod)
     {
         this(skillLevel, skillAttribute1, skillAttribute2, skillAttribute3, Arrays.asList(mod));
     }
     
-    public DarkEye5SkillRoll(Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, Collection<Modifiers> mod)
+    public DarkEye5SkillRoll(Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, Collection<DarkEye5Modifiers> mod)
     {
         super(mod);
         this.skillLevel = skillLevel;
@@ -53,7 +53,7 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     public GenericResult getResult()
     {
         DarkEye5Results results = buildResults(D20.INSTANCE.roll(), D20.INSTANCE.roll(), D20.INSTANCE.roll());
-        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
         return results;
     }
     

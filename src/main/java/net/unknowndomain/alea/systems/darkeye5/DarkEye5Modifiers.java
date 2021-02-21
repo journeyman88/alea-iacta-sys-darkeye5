@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marco Bignami.
+ * Copyright 2021 journeyman.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,11 @@
  */
 package net.unknowndomain.alea.systems.darkeye5;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import net.unknowndomain.alea.roll.GenericRoll;
-
 /**
  *
  * @author journeyman
  */
-public abstract class DarkEye5Roll implements GenericRoll
+public enum DarkEye5Modifiers
 {
-    
-    protected final Set<DarkEye5Modifiers> mods;
-    
-    public DarkEye5Roll(DarkEye5Modifiers ... mod)
-    {
-        this(Arrays.asList(mod));
-    }
-    
-    public DarkEye5Roll(Collection<DarkEye5Modifiers> mod)
-    {
-        this.mods = new HashSet<>();
-        if (mod != null)
-        {
-            this.mods.addAll(mod);
-        }
-    }
+    VERBOSE
 }

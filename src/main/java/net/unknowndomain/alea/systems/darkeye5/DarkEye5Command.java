@@ -15,21 +15,12 @@
  */
 package net.unknowndomain.alea.systems.darkeye5;
 
-import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
-import net.unknowndomain.alea.command.HelpWrapper;
-import net.unknowndomain.alea.messages.ReturnMsg;
 import net.unknowndomain.alea.systems.RpgSystemCommand;
 import net.unknowndomain.alea.systems.RpgSystemDescriptor;
 import net.unknowndomain.alea.roll.GenericRoll;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import net.unknowndomain.alea.systems.RpgSystemOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,71 +33,6 @@ public class DarkEye5Command extends RpgSystemCommand
     private static final Logger LOGGER = LoggerFactory.getLogger(DarkEye5Command.class);
     private static final RpgSystemDescriptor DESC = new RpgSystemDescriptor("The Dark Eye 5th Edition", "da5", "the-dark-eye-5th");
     
-    private static final String ATTR_PARAM = "attribute";
-    private static final String SKILL_PARAM = "skill-points";
-    private static final String SKILL_ATTR1_PARAM = "skill-attribute1";
-    private static final String SKILL_ATTR2_PARAM = "skill-attribute2";
-    private static final String SKILL_ATTR3_PARAM = "skill-attribute3";
-    
-    private static final Options CMD_OPTIONS;
-    
-    static {
-        CMD_OPTIONS = new Options();
-        OptionGroup rollMode = new OptionGroup();
-        CMD_OPTIONS.addOption(
-                Option.builder("a")
-                        .longOpt(ATTR_PARAM)
-                        .desc("Attribute check")
-                        .hasArg()
-                        .argName("attributeValue")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("sp")
-                        .longOpt(SKILL_PARAM)
-                        .desc("Skill points for skill check")
-                        .hasArg()
-                        .argName("skillPoints")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("s1")
-                        .longOpt(SKILL_ATTR1_PARAM)
-                        .desc("First attribute for a skill check")
-                        .hasArg()
-                        .argName("firstAttribute")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("s2")
-                        .longOpt(SKILL_ATTR2_PARAM)
-                        .desc("Second attribute for a skill check")
-                        .hasArg()
-                        .argName("secondAttribute")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("s3")
-                        .longOpt(SKILL_ATTR3_PARAM)
-                        .desc("Third attribute for a skill check")
-                        .hasArg()
-                        .argName("thirdAttribute")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("h")
-                        .longOpt( CMD_HELP )
-                        .desc( "Print help")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("v")
-                        .longOpt(CMD_VERBOSE)
-                        .desc("Enable verbose output")
-                        .build()
-        );
-        
-    }
     
     public DarkEye5Command()
     {
@@ -124,62 +50,36 @@ public class DarkEye5Command extends RpgSystemCommand
     {
         return LOGGER;
     }
-    
+
     @Override
-    protected Optional<GenericRoll> safeCommand(String cmdParams)
+    protected Optional<GenericRoll> safeCommand(RpgSystemOptions options, Locale lang)
     {
         Optional<GenericRoll> retVal;
-        try
-        {
-            CommandLineParser parser = new DefaultParser();
-            CommandLine cmd = parser.parse(CMD_OPTIONS, cmdParams.split(" "));
-
-            if (cmd.hasOption(CMD_HELP) || 
-                    (cmd.hasOption(ATTR_PARAM) && cmd.hasOption(SKILL_PARAM)) ||
-                    (cmd.hasOption(SKILL_PARAM) ^ cmd.hasOption(SKILL_ATTR1_PARAM)) ||
-                    (cmd.hasOption(SKILL_PARAM) ^ cmd.hasOption(SKILL_ATTR2_PARAM)) ||
-                    (cmd.hasOption(SKILL_PARAM) ^ cmd.hasOption(SKILL_ATTR3_PARAM))
-                    )
-            {
-                return Optional.empty();
-            }
-
-
-            Set<DarkEye5AttrRoll.Modifiers> mods = new HashSet<>();
-
-            String p;
-            String t;
-            if (cmd.hasOption(CMD_VERBOSE))
-            {
-                mods.add(DarkEye5Roll.Modifiers.VERBOSE);
-            }
-            GenericRoll roll;
-            if (cmd.hasOption(ATTR_PARAM))
-            {
-                String a = cmd.getOptionValue(ATTR_PARAM);
-                roll = new DarkEye5AttrRoll(Integer.parseInt(a), mods);
-            }
-            else
-            {
-                String sL = cmd.getOptionValue(SKILL_PARAM);
-                String s1 = cmd.getOptionValue(SKILL_ATTR1_PARAM);
-                String s2 = cmd.getOptionValue(SKILL_ATTR2_PARAM);
-                String s3 = cmd.getOptionValue(SKILL_ATTR3_PARAM);
-                roll = new DarkEye5SkillRoll(Integer.parseInt(sL), Integer.parseInt(s1), Integer.parseInt(s2), Integer.parseInt(s3), mods);
-            }
-            retVal = Optional.of(roll);
-        } 
-        catch (ParseException | NumberFormatException ex)
+        if (options.isHelp() || !(options instanceof DarkEye5Options) )
         {
             retVal = Optional.empty();
         }
+        else
+        {
+            DarkEye5Options opt = (DarkEye5Options) options;
+            GenericRoll roll;
+            if (opt.isAttributeMode())
+            {
+                roll = new DarkEye5AttrRoll(opt.getAttribute(), opt.getModifiers());
+            }
+            else
+            {
+                roll = new DarkEye5SkillRoll(opt.getSkillPoints(), opt.getSkillAttribute1(), opt.getSkillAttribute2(), opt.getSkillAttribute3(), opt.getModifiers());
+            }
+            retVal = Optional.of(roll);
+        }
         return retVal;
     }
-    
+
     @Override
-    public ReturnMsg getHelpMessage(String cmdName)
+    public RpgSystemOptions buildOptions()
     {
-        return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
+        return new DarkEye5Options();
     }
     
 }
