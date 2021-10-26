@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -28,25 +29,25 @@ import net.unknowndomain.alea.roll.GenericResult;
  */
 public class DarkEye5Results extends GenericResult
 {
-    private final List<Integer> results;
+    private final List<SingleResult<Integer>> results;
     private boolean success;
     private boolean critical;
     private boolean spectacular;
     private Integer qualityLevel = null;
     
-    public DarkEye5Results(Integer ... results)
+    public DarkEye5Results(SingleResult<Integer> ... results)
     {
         this(Arrays.asList(results));
     }
     
-    public DarkEye5Results(List<Integer> results)
+    public DarkEye5Results(List<SingleResult<Integer>> results)
     {
-        List<Integer> tmp = new ArrayList<>(results.size());
+        List<SingleResult<Integer>> tmp = new ArrayList<>(results.size());
         tmp.addAll(results);
         this.results = Collections.unmodifiableList(tmp);
     }
 
-    public List<Integer> getResults()
+    public List<SingleResult<Integer>> getResults()
     {
         return results;
     }
@@ -120,9 +121,10 @@ public class DarkEye5Results extends GenericResult
         {
             messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
             messageBuilder.append("Results: ").append(" [ ");
-            for (Integer t : getResults())
+            for (SingleResult<Integer> t : getResults())
             {
-                messageBuilder.append(t).append(" ");
+                messageBuilder.append("( ").append(t.getLabel()).append(" => ");
+                messageBuilder.append(t.getValue()).append(") ");
             }
             messageBuilder.append("]").appendNewLine();
         }

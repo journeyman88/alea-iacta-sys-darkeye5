@@ -17,7 +17,8 @@ package net.unknowndomain.alea.systems.darkeye5;
 
 import java.util.Arrays;
 import java.util.Collection;
-import net.unknowndomain.alea.dice.standard.D20;
+import net.unknowndomain.alea.random.SingleResult;
+import net.unknowndomain.alea.random.dice.bag.D20;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -43,21 +44,21 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
     @Override
     public GenericResult getResult()
     {
-        DarkEye5Results results = buildResults(D20.INSTANCE.roll());
+        DarkEye5Results results = buildResults(D20.INSTANCE.nextResult().get());
         results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
         return results;
     }
     
-    private DarkEye5Results buildResults(Integer res)
+    private DarkEye5Results buildResults(SingleResult<Integer> res)
     {
         DarkEye5Results results;
-        int tmp = D20.INSTANCE.roll();
-        switch (res)
+        SingleResult<Integer> tmp = D20.INSTANCE.nextResult().get();
+        switch (res.getValue())
         {
             case 1:
                 results = new DarkEye5Results(res, tmp);
                 results.setSuccess(true);
-                if (tmp <= attribute)
+                if (tmp.getValue() <= attribute)
                 {
                     results.setCritical(true);
                 }
@@ -66,7 +67,7 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
             case 20:
                 results = new DarkEye5Results(res, tmp);
                 results.setSuccess(false);
-                if ((tmp > attribute) || (tmp >= 20))
+                if ((tmp.getValue() > attribute) || (tmp.getValue() >= 20))
                 {
                     results.setCritical(true);
                 }
@@ -74,7 +75,7 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
                     
             default:
                 results = new DarkEye5Results(res);
-                results.setSuccess(res <= attribute);
+                results.setSuccess(res.getValue() <= attribute);
                 break;
         }
         

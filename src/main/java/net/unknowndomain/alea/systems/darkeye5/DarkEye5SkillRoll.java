@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import net.unknowndomain.alea.dice.standard.D20;
+import net.unknowndomain.alea.random.SingleResult;
+import net.unknowndomain.alea.random.dice.bag.D20;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -52,12 +53,12 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     @Override
     public GenericResult getResult()
     {
-        DarkEye5Results results = buildResults(D20.INSTANCE.roll(), D20.INSTANCE.roll(), D20.INSTANCE.roll());
+        DarkEye5Results results = buildResults(D20.INSTANCE.nextResult().get(), D20.INSTANCE.nextResult().get(), D20.INSTANCE.nextResult().get());
         results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
         return results;
     }
     
-    private DarkEye5Results buildResults(Integer ... res)
+    private DarkEye5Results buildResults(SingleResult<Integer> ... res)
     {
         DarkEye5Results results = new DarkEye5Results(res);
         int oneCount = 0, twentyCount = 0;
@@ -66,9 +67,9 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
         int diff = 0;
         for(int i = 0; i < results.getResults().size(); i++)
         {
-            int check = results.getResults().get(i);
+            SingleResult<Integer> check = results.getResults().get(i);
             int attr = skillAttributes.get(i);
-            switch (check)
+            switch (check.getValue())
             {
                 case 1:
                     oneCount++;
@@ -76,10 +77,10 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
                 case 20:
                     twentyCount++;
                     succ = false;
-                    diff += ((check - attr) > 0) ? (check - attr) : 0;
+                    diff += ((check.getValue() - attr) > 0) ? (check.getValue() - attr) : 0;
                     break;
                 default:
-                    int tmp = check - attr;
+                    int tmp = check.getValue() - attr;
                     diff += (tmp > 0) ? tmp : 0;
                     succ = succ && tmp <=0;
                     break;
