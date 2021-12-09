@@ -18,6 +18,7 @@ package net.unknowndomain.alea.systems.darkeye5;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import net.unknowndomain.alea.roll.GenericRoll;
 
@@ -27,20 +28,27 @@ import net.unknowndomain.alea.roll.GenericRoll;
  */
 public abstract class DarkEye5Roll implements GenericRoll
 {
-    
+    private final Locale lang;
     protected final Set<DarkEye5Modifiers> mods;
     
-    public DarkEye5Roll(DarkEye5Modifiers ... mod)
+    public DarkEye5Roll(Locale lang, DarkEye5Modifiers ... mod)
     {
-        this(Arrays.asList(mod));
+        this(lang, Arrays.asList(mod));
     }
     
-    public DarkEye5Roll(Collection<DarkEye5Modifiers> mod)
+    public DarkEye5Roll(Locale lang, Collection<DarkEye5Modifiers> mod)
     {
         this.mods = new HashSet<>();
         if (mod != null)
         {
             this.mods.addAll(mod);
         }
+        this.lang = lang;
+    }
+    
+    protected void setResultFlags(DarkEye5Results results)
+    {
+        results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
+        results.setLang(lang);
     }
 }

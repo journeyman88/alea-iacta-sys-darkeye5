@@ -21,14 +21,17 @@ import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
 import net.unknowndomain.alea.random.SingleResult;
-import net.unknowndomain.alea.roll.GenericResult;
+import net.unknowndomain.alea.roll.LocalizedResult;
 
 /**
  *
  * @author journeyman
  */
-public class DarkEye5Results extends GenericResult
+public class DarkEye5Results extends LocalizedResult
 {
+    
+    private static final String BUNDLE_NAME = "net.unknowndomain.alea.systems.darkeye5.RpgSystemBundle";
+    
     private final List<SingleResult<Integer>> results;
     private boolean success;
     private boolean critical;
@@ -95,32 +98,41 @@ public class DarkEye5Results extends GenericResult
     @Override
     protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
     {
-        messageBuilder.append("Outcome: ");
-        if (isSpectacular())
+        String indent = getIndent(indentValue);
+        messageBuilder.append(indent).append(translate("darkeye5.results.outcome"));
+        if (isSpectacular() && isSuccess())
         {
-            messageBuilder.append("Spectacular ");
+            messageBuilder.append(translate("darkeye5.results.spectacularSuccess"));
         }
+        else if (isSpectacular())
+        {
+            messageBuilder.append(translate("darkeye5.results.spectacularFailure"));
+        }
+        else if (isCritical() && isSuccess())
+        {
+            messageBuilder.append(translate("darkeye5.results.criticalSuccess"));
+        } 
         else if (isCritical())
         {
-            messageBuilder.append("Critical ");
+            messageBuilder.append(translate("darkeye5.results.criticalFailure"));
         }
-        if (isSuccess())
+        else if (isSuccess())
         {
-            messageBuilder.append("Success");
+            messageBuilder.append(translate("darkeye5.results.success"));
         }
         else
         {
-            messageBuilder.append("Failure");
+            messageBuilder.append(translate("darkeye5.results.failure"));
         }
         if (getQualityLevel() != null)
         {
-            messageBuilder.append(" [ QL : ").append(getQualityLevel()).append(" ]");
+            messageBuilder.append(translate("darkeye5.results.qualityLevel", getQualityLevel()));
         }
         messageBuilder.appendNewLine();
         if (verbose)
         {
-            messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
-            messageBuilder.append("Results: ").append(" [ ");
+            messageBuilder.append(indent).append("Roll ID: ").append(getUuid()).appendNewLine();
+            messageBuilder.append(indent).append(translate("darkeye5.results.diceResults")).append(" [ ");
             for (SingleResult<Integer> t : getResults())
             {
                 messageBuilder.append("( ").append(t.getLabel()).append(" => ");
@@ -128,5 +140,11 @@ public class DarkEye5Results extends GenericResult
             }
             messageBuilder.append("]").appendNewLine();
         }
+    }
+
+    @Override
+    protected String getBundleName()
+    {
+        return BUNDLE_NAME;
     }
 }

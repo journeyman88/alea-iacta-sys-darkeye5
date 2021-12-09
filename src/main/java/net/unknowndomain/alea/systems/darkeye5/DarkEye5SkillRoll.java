@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.random.dice.bag.D20;
 import net.unknowndomain.alea.roll.GenericResult;
@@ -35,14 +36,14 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     private final Integer skillLevel;
     private final List<Integer> skillAttributes;
     
-    public DarkEye5SkillRoll(Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, DarkEye5Modifiers ... mod)
+    public DarkEye5SkillRoll(Locale lang, Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, DarkEye5Modifiers ... mod)
     {
-        this(skillLevel, skillAttribute1, skillAttribute2, skillAttribute3, Arrays.asList(mod));
+        this(lang, skillLevel, skillAttribute1, skillAttribute2, skillAttribute3, Arrays.asList(mod));
     }
     
-    public DarkEye5SkillRoll(Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, Collection<DarkEye5Modifiers> mod)
+    public DarkEye5SkillRoll(Locale lang, Integer skillLevel, Integer skillAttribute1, Integer skillAttribute2, Integer skillAttribute3, Collection<DarkEye5Modifiers> mod)
     {
-        super(mod);
+        super(lang, mod);
         this.skillLevel = skillLevel;
         this.skillAttributes = new ArrayList<>(3);
         this.skillAttributes.add(skillAttribute1);
@@ -54,7 +55,7 @@ public class DarkEye5SkillRoll extends DarkEye5Roll
     public GenericResult getResult()
     {
         DarkEye5Results results = buildResults(D20.INSTANCE.nextResult().get(), D20.INSTANCE.nextResult().get(), D20.INSTANCE.nextResult().get());
-        results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
+        setResultFlags(results);
         return results;
     }
     

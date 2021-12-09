@@ -17,6 +17,7 @@ package net.unknowndomain.alea.systems.darkeye5;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.random.dice.bag.D20;
 import net.unknowndomain.alea.roll.GenericResult;
@@ -30,14 +31,14 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
     
     private final Integer attribute;
     
-    public DarkEye5AttrRoll(Integer attribute, DarkEye5Modifiers ... mod)
+    public DarkEye5AttrRoll(Locale lang, Integer attribute, DarkEye5Modifiers ... mod)
     {
-        this(attribute, Arrays.asList(mod));
+        this(lang, attribute, Arrays.asList(mod));
     }
     
-    public DarkEye5AttrRoll(Integer attribute, Collection<DarkEye5Modifiers> mod)
+    public DarkEye5AttrRoll(Locale lang, Integer attribute, Collection<DarkEye5Modifiers> mod)
     {
-        super(mod);
+        super(lang, mod);
         this.attribute = attribute;
     }
     
@@ -45,7 +46,7 @@ public class DarkEye5AttrRoll extends DarkEye5Roll
     public GenericResult getResult()
     {
         DarkEye5Results results = buildResults(D20.INSTANCE.nextResult().get());
-        results.setVerbose(mods.contains(DarkEye5Modifiers.VERBOSE));
+        setResultFlags(results);
         return results;
     }
     

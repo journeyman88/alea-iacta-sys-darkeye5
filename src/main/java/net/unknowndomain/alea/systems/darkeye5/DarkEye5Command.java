@@ -65,11 +65,11 @@ public class DarkEye5Command extends RpgSystemCommand
             GenericRoll roll;
             if (opt.isAttributeMode())
             {
-                roll = new DarkEye5AttrRoll(opt.getAttribute(), opt.getModifiers());
+                roll = new DarkEye5AttrRoll(lang, opt.getAttribute(), opt.getModifiers());
             }
             else
             {
-                roll = new DarkEye5SkillRoll(opt.getSkillPoints(), opt.getSkillAttribute1(), opt.getSkillAttribute2(), opt.getSkillAttribute3(), opt.getModifiers());
+                roll = new DarkEye5SkillRoll(lang, opt.getSkillPoints(), opt.getSkillAttribute1(), opt.getSkillAttribute2(), opt.getSkillAttribute3(), opt.getModifiers());
             }
             retVal = Optional.of(roll);
         }
